@@ -1,4 +1,5 @@
 import { ActivitiesProvider } from "../controllers/activities";
+import { DayProvider } from "../controllers/day";
 import { NPCsProvider } from "../controllers/NPCs";
 import { ShipProvider } from "../controllers/ship";
 
@@ -8,12 +9,14 @@ interface ContextProvidersProps {
 
 export function ContextProviders({ children }: ContextProvidersProps) {
   return (
-    <ShipProvider>
-      <NPCsProvider>
-        <ActivitiesProvider>
-          {children}
-        </ActivitiesProvider>
-      </NPCsProvider>
-    </ShipProvider>
+    <DayProvider>
+      <ShipProvider>
+        <NPCsProvider>
+          <ActivitiesProvider>
+            {children}
+          </ActivitiesProvider>
+        </NPCsProvider>
+      </ShipProvider>
+    </DayProvider>
   );
 }

@@ -3,6 +3,7 @@ import { actionTypes, Activity } from "../types/activities";
 import { startingActivities } from "../DemoDataDeleteMe/StartingActivities";
 import { useNPCsContext } from "./NPCs";
 import { useShipContext } from "./ship";
+import { useDayContext } from "./day";
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -28,6 +29,7 @@ export const useActivitiesContext = () => {
 export function ActivitiesProvider({ children }: { children: React.ReactNode }) {
   const { NPCs, updateNPCNeed } = useNPCsContext();
   const { updateShipNeed } = useShipContext();
+  const { progressDay } = useDayContext();
 
   function doActivity(assignedActivity: AssignedActivity) {
     const activity = activities.find(a => a.id === assignedActivity.activityId);
@@ -49,6 +51,7 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
 
   function doActivities(assignedActivities: AssignedActivity[]) {
     assignedActivities.forEach(aa => doActivity(aa));
+    progressDay();
   }
 
   const [activities, setActivities] = useState<Activity[]>(startingActivities);

@@ -2,6 +2,7 @@ import { Button, Flex, Separator, Text } from "@radix-ui/themes";
 import { useNPCsContext } from "../../controllers/NPCs";
 import { AssignedActivity, useActivitiesContext } from "../../controllers/activities";
 import { useState } from "react";
+import DayDisplay from "./DayDisplay";
 
 function ActivitiesList() {
   const { NPCs } = useNPCsContext();
@@ -44,7 +45,11 @@ function ActivitiesList() {
         ))}
       </Flex>
     </Flex>
-    <Button onClick={() => doActivities(assignedActivities)}>Log Assigned Activities</Button>
+    <Flex height={'100%'} direction='row' align='center' justify='center' gap='4' mt='6'>
+      <DayDisplay />
+      <Separator orientation="vertical" size='4' />
+      <Button onClick={() => doActivities(assignedActivities)}>Log Assigned Activities</Button>
+    </Flex>
   </>
 }
 
