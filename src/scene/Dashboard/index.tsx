@@ -1,4 +1,4 @@
-import { Box, Flex, Separator } from "@radix-ui/themes";
+import { Flex, Separator } from "@radix-ui/themes";
 import NPCList from "./NPCList";
 import ActivitiesList from "./ActivitiesList";
 import Ship from "./Ship";
