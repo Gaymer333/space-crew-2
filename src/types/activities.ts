@@ -1,8 +1,18 @@
 import NPC from "./NPCs";
+import { ShipNeedIds } from "./ship";
+
+export enum actionTypes {
+  NPCNeedChange = 'NPCNeedChange',
+  ShipNeedChange = 'ShipNeedChange',
+}
 
 type action = {
-  type: 'needChange';
+  type: actionTypes.NPCNeedChange;
   needId: NPC['needs'][number]['id'];
+  amount: number;
+} | {
+  type: actionTypes.ShipNeedChange;
+  needId: ShipNeedIds;
   amount: number;
 }
 

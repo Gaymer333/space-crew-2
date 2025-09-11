@@ -1,7 +1,8 @@
 import { createContext, useContext, useState } from "react";
-import { Activity } from "../types/activities";
+import { actionTypes, Activity } from "../types/activities";
 import { startingActivities } from "../DemoDataDeleteMe/StartingActivities";
 import { useNPCsContext } from "./NPCs";
+import { useShipContext } from "./ship";
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -26,14 +27,22 @@ export const useActivitiesContext = () => {
 
 export function ActivitiesProvider({ children }: { children: React.ReactNode }) {
   const { NPCs, updateNPCNeed } = useNPCsContext();
+  const { updateShipNeed } = useShipContext();
 
   function doActivity(assignedActivity: AssignedActivity) {
     const activity = activities.find(a => a.id === assignedActivity.activityId);
     const npc = NPCs.find(n => n.id === assignedActivity.npcId);
     if (!activity || !npc) throw new Error("Activity or NPC not found");
     activity.actions.forEach(action => {
-      if (action.type === 'needChange') {
-        updateNPCNeed(npc, action.needId, action.amount);
+      switch (action.type) {
+        case actionTypes.NPCNeedChange:
+          updateNPCNeed(npc, action.needId, action.amount);
+          break;
+        case actionTypes.ShipNeedChange:
+          updateShipNeed(action.needId, action.amount);
+          break;
+        default:
+          throw new Error("Unknown action type");
       }
     });
   }
@@ -43,7 +52,7 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
   }
 
   const [activities, setActivities] = useState<Activity[]>(startingActivities);
-  
+
   return (
     <ActivitiesContext.Provider value={{ activities, setActivities, doActivities }} >
       {children}

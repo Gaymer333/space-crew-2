@@ -1,4 +1,4 @@
-import { Activity } from "../types/activities";
+import { actionTypes, Activity } from "../types/activities";
 
 export const startingActivities: Activity[] = [
   {
@@ -8,7 +8,7 @@ export const startingActivities: Activity[] = [
     type: 'job',
     actions: [
       {
-        type: 'needChange',
+        type: actionTypes.NPCNeedChange,
         needId: 'cleanliness',
         amount: -10,
       },
@@ -21,9 +21,14 @@ export const startingActivities: Activity[] = [
     type: 'job',
     actions: [
       {
-        type: 'needChange',
+        type: actionTypes.NPCNeedChange,
         needId: 'cleanliness',
         amount: -10,
+      },
+      {
+        type: actionTypes.ShipNeedChange,
+        needId: 'power',
+        amount: 10,
       },
     ],
   },
@@ -34,7 +39,7 @@ export const startingActivities: Activity[] = [
     type: 'need',
     actions: [
       {
-        type: 'needChange',
+        type: actionTypes.NPCNeedChange,
         needId: 'cleanliness',
         amount: 20,
       },
@@ -47,7 +52,7 @@ export const startingActivities: Activity[] = [
     type: 'relationship',
     actions: [
       {
-        type: 'needChange',
+        type: actionTypes.NPCNeedChange,
         needId: 'cleanliness',
         amount: -5,
       },
