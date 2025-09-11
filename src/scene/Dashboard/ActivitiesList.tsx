@@ -17,12 +17,12 @@ function ActivitiesList() {
   }
 
   return <>
-    <Flex direction='column' align='center' justify='center' gap='5'>
+    <Flex height='100%' direction='column' align='center' justify='center' gap='5'>
       <Text weight='bold' size='7'>Activities List</Text>
-      <Flex direction='row' align='center' justify='center' gap='4'>
+      <Flex height='100%' direction='row' align='center' justify='center' gap='4'>
         {activities.map((activity, index) => (
           <>
-            {index > 0 && <Separator orientation="vertical" size='3' />}
+            {index > 0 && <Separator orientation="vertical" size='4' />}
 
             <Flex key={activity.id} direction='column' align='center' justify='center' gap='2'>
               <Text weight='bold' size='5'>{activity.name}</Text>
