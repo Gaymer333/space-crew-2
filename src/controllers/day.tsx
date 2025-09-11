@@ -4,6 +4,7 @@ interface DayContextType {
   day: number;
   dayProgression: number;
   dayDuration: number;
+  dayProgressionTitle: string;
   setDay: (day: number) => void;
   nextDay: () => void;
   progressDay: () => void;
@@ -20,23 +21,18 @@ export const useDayContext = () => {
 };
 
 const DAY_DURATION = 3
+const DAY_PROGRESSION_TITLES = ["Morning", "Afternoon", "Evening"];
 
 export function DayProvider({ children }: { children: React.ReactNode }) {
   const [day, setDay] = useState(1);
   const [dayProgression, setDayProgression] = useState(1);
-  const didIncrementRef = useRef(false);
+  const currentDayProgressionTitle = useRef(DAY_PROGRESSION_TITLES[0]);
 
   function progressDay() {
     setDayProgression(prev => {
-      if (prev >= DAY_DURATION) {
-        if (!didIncrementRef.current) {
-          setDay(d => d + 1);
-          didIncrementRef.current = true;
-        }
-        return 1;
-      }
-      didIncrementRef.current = false;
-      return prev + 1;
+      const newProgression = Math.min(prev + 1, DAY_DURATION);
+      currentDayProgressionTitle.current = DAY_PROGRESSION_TITLES[newProgression - 1];
+      return newProgression;
     });
   }
 
@@ -50,6 +46,7 @@ export function DayProvider({ children }: { children: React.ReactNode }) {
       day,
       dayProgression,
       dayDuration: DAY_DURATION,
+      dayProgressionTitle: currentDayProgressionTitle.current,
       setDay,
       nextDay,
       progressDay

@@ -6,7 +6,7 @@ export enum actionTypes {
   ShipNeedChange = 'ShipNeedChange',
 }
 
-type action = {
+export type ActivityAction = {
   type: actionTypes.NPCNeedChange;
   needId: NPC['needs'][number]['id'];
   amount: number;
@@ -21,5 +21,5 @@ export type Activity = {
   name: string;
   description: string;
   type: 'job' | 'need' | 'recreation' | 'relationship';
-  actions: action[];
+  actions: ActivityAction[];
 };

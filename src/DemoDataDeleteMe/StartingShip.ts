@@ -1,4 +1,4 @@
-import { ShipNeed, ShipNeedIds } from "../types/ship";
+import { ShipNeed } from "../types/ship";
 
 type StartingShipProperties = {
   needs: ShipNeed[];

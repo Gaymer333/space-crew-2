@@ -1,9 +1,10 @@
+import { Text } from "@radix-ui/themes";
 import { useDayContext } from "../../controllers/day";
 
 function DayDisplay() {
-  const { day, dayProgression, dayDuration } = useDayContext();
+  const { day, dayProgressionTitle } = useDayContext();
 
-  return <div>Day {day} - Progression {dayProgression} / {dayDuration}</div>;
+  return <Text>Day {day} - {dayProgressionTitle}</Text>;
 }
 
 export default DayDisplay;

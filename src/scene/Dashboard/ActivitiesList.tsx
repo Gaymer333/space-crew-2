@@ -3,12 +3,16 @@ import { useNPCsContext } from "../../controllers/NPCs";
 import { AssignedActivity, useActivitiesContext } from "../../controllers/activities";
 import { useState } from "react";
 import DayDisplay from "./DayDisplay";
+import { useDayContext } from "../../controllers/day";
 
 function ActivitiesList() {
   const { NPCs } = useNPCsContext();
   const { activities, doActivities } = useActivitiesContext();
+  const { dayProgression, dayDuration, nextDay } = useDayContext();
 
   const [assignedActivities, setAssignedActivities] = useState<AssignedActivity[]>([]);
+
+  const isDayComplete = dayProgression >= dayDuration;
 
   const handleActivityAssignment = (npcId: string, activityId: string) => {
     setAssignedActivities(prev => {
@@ -48,7 +52,7 @@ function ActivitiesList() {
     <Flex height={'100%'} direction='row' align='center' justify='center' gap='4' mt='6'>
       <DayDisplay />
       <Separator orientation="vertical" size='4' />
-      <Button onClick={() => doActivities(assignedActivities)}>Log Assigned Activities</Button>
+      <Button onClick={() => isDayComplete ? nextDay() : doActivities(assignedActivities)}>{isDayComplete ? "End day" : "Log Assigned Activities"}</Button>
     </Flex>
   </>
 }

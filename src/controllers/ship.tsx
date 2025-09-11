@@ -1,6 +1,8 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import StartingShip from "../DemoDataDeleteMe/StartingShip";
 import { ShipNeed } from "../types/ship";
+import { actionTypes, ActivityAction } from "../types/activities";
+import { useDayContext } from "./day";
 
 interface ShipContextType {
   needs: ShipNeed[];
@@ -18,8 +20,28 @@ export const useShipContext = () => {
   return context;
 };
 
+const END_OF_DAY_ACTIVITIES: ActivityAction[] = [
+  { type: actionTypes.ShipNeedChange, needId: 'power', amount: -10 },
+  { type: actionTypes.ShipNeedChange, needId: 'hull', amount: -5 },
+  { type: actionTypes.ShipNeedChange, needId: 'oxygen', amount: -5 },
+  { type: actionTypes.ShipNeedChange, needId: 'water', amount: -5 },
+  { type: actionTypes.ShipNeedChange, needId: 'fuel', amount: -5 },
+]
+
 export function ShipProvider({ children }: { children: React.ReactNode }) {
+  const { day } = useDayContext();
+
   const [needs, setNeeds] = useState<ShipNeed[]>(StartingShip.needs);
+
+  useEffect(() => {
+    if (day > 1) {
+      END_OF_DAY_ACTIVITIES.forEach(action => {
+        if (action.type === actionTypes.ShipNeedChange) {
+          updateShipNeed(action.needId, action.amount);
+        }
+      });
+    }
+  }, [day]);
 
   function updateShipNeed(needId: string, amount: number) {
     const need = needs.find(s => s.id === needId);
