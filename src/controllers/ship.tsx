@@ -3,6 +3,7 @@ import StartingShip from "../DemoDataDeleteMe/StartingShip";
 import { ShipNeed } from "../types/ship";
 import { actionTypes, ActivityAction } from "../types/activities";
 import { useDayContext } from "./day";
+import { useStageContext } from "./stage";
 
 interface ShipContextType {
   needs: ShipNeed[];
@@ -20,7 +21,7 @@ export const useShipContext = () => {
   return context;
 };
 
-const END_OF_DAY_ACTIVITIES: ActivityAction[] = [
+export const END_OF_DAY_ACTIVITIES: ActivityAction[] = [
   { type: actionTypes.ShipNeedChange, needId: 'power', amount: -10 },
   { type: actionTypes.ShipNeedChange, needId: 'hull', amount: -5 },
   { type: actionTypes.ShipNeedChange, needId: 'oxygen', amount: -5 },

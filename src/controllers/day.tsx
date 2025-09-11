@@ -1,4 +1,5 @@
 import { createContext, useContext, useRef, useState } from "react";
+import { useStageContext } from "./stage";
 
 interface DayContextType {
   day: number;
@@ -24,6 +25,8 @@ const DAY_DURATION = 3
 const DAY_PROGRESSION_TITLES = ["Morning", "Afternoon", "Evening"];
 
 export function DayProvider({ children }: { children: React.ReactNode }) {
+  const { setShowEndOfDaySummary } = useStageContext();
+
   const [day, setDay] = useState(1);
   const [dayProgression, setDayProgression] = useState(1);
   const currentDayProgressionTitle = useRef(DAY_PROGRESSION_TITLES[0]);
@@ -39,6 +42,7 @@ export function DayProvider({ children }: { children: React.ReactNode }) {
   function nextDay() {
     setDay(prevDay => prevDay + 1);
     setDayProgression(1);
+    setShowEndOfDaySummary(true);
   }
 
   return (
