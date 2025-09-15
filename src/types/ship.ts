@@ -2,10 +2,13 @@
 
 export type ShipNeedIds = 'hull' | 'fuel' | 'oxygen' | 'power' | 'water';
 
-export type ShipNeed = {
-  id: ShipNeedIds;
+export interface ShipNeedsBase {
+  id: string;
   name: string;
-  value: number;
   minValue: number;
   maxValue: number;
+}
+
+export interface ShipNeed extends ShipNeedsBase {
+  value: number;
 }

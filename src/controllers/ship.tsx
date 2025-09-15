@@ -1,9 +1,7 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import StartingShip from "../DemoDataDeleteMe/StartingShip";
-import { ShipNeed } from "../types/ship";
 import { actionTypes, ActivityAction } from "../types/activities";
 import { useDayContext } from "./day";
-import { useStageContext } from "./stage";
+import { ShipNeed, ShipNeedsBase } from "../types/ship";
 
 interface ShipContextType {
   needs: ShipNeed[];
@@ -21,6 +19,14 @@ export const useShipContext = () => {
   return context;
 };
 
+export const NEEDS: ShipNeedsBase[] = [
+  { id: 'oxygen', name: 'Oxygen', minValue: 0, maxValue: 100 },
+  { id: 'power', name: 'Power', minValue: 0, maxValue: 100 },
+  { id: 'hull', name: 'Hull Integrity', minValue: 0, maxValue: 100 },
+  { id: 'fuel', name: 'Fuel', minValue: 0, maxValue: 100 },
+  { id: 'water', name: 'Water', minValue: 0, maxValue: 100 },
+]
+
 export const END_OF_DAY_ACTIVITIES: ActivityAction[] = [
   { type: actionTypes.ShipNeedChange, needId: 'power', amount: -10 },
   { type: actionTypes.ShipNeedChange, needId: 'hull', amount: -5 },
@@ -29,10 +35,17 @@ export const END_OF_DAY_ACTIVITIES: ActivityAction[] = [
   { type: actionTypes.ShipNeedChange, needId: 'fuel', amount: -5 },
 ]
 
+function initializeNeeds(): ShipNeed[] {
+  return NEEDS.map(need => ({
+    ...need,
+    value: need.maxValue / 2,
+  }));
+}
+
 export function ShipProvider({ children }: { children: React.ReactNode }) {
   const { day } = useDayContext();
 
-  const [needs, setNeeds] = useState<ShipNeed[]>(StartingShip.needs);
+  const [needs, setNeeds] = useState<ShipNeed[]>(initializeNeeds());
 
   useEffect(() => {
     if (day > 1) {

@@ -4,6 +4,7 @@ import { startingActivities } from "../DemoDataDeleteMe/StartingActivities";
 import { useNPCsContext } from "./NPCs";
 import { useShipContext } from "./ship";
 import { useDayContext } from "./day";
+import { useEventLogs } from "./eventLogs";
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -30,6 +31,7 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
   const { NPCs, updateNPCNeed } = useNPCsContext();
   const { updateShipNeed } = useShipContext();
   const { progressDay } = useDayContext();
+  const { addLog } = useEventLogs();
 
   function doActivity(assignedActivity: AssignedActivity) {
     const activity = activities.find(a => a.id === assignedActivity.activityId);
@@ -39,9 +41,11 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
       switch (action.type) {
         case actionTypes.NPCNeedChange:
           updateNPCNeed(npc, action.needId, action.amount);
+          addLog({ message: `${npc.name} performed ${activity.name}, changing ${action.needId} by ${action.amount}`, type: 'info' });
           break;
         case actionTypes.ShipNeedChange:
           updateShipNeed(action.needId, action.amount);
+          addLog({ message: `Ship performed ${activity.name}, changing ${action.needId} by ${action.amount}`, type: 'info' });
           break;
         default:
           throw new Error("Unknown action type");
