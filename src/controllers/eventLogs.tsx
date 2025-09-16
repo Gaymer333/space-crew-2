@@ -2,7 +2,7 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface EventLog {
   id: string;
-  message: string;
+  message: string | ReactNode;
   timestamp: Date;
   type?: 'info' | 'warning' | 'error';
 }

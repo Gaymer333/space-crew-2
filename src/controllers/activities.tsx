@@ -5,6 +5,7 @@ import { useNPCsContext } from "./NPCs";
 import { useShipContext } from "./ship";
 import { useDayContext } from "./day";
 import { useEventLogs } from "./eventLogs";
+import { Strong, Text } from "@radix-ui/themes";
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -37,20 +38,24 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
     const activity = activities.find(a => a.id === assignedActivity.activityId);
     const npc = NPCs.find(n => n.id === assignedActivity.npcId);
     if (!activity || !npc) throw new Error("Activity or NPC not found");
+    if (activity.actions.length === 0) return;
+    const message = <Text align='left'><Strong>{npc.name}</Strong> is starting activity <Strong>{activity.name}:</Strong></Text>;
+    addLog({ message, type: 'info' });
     activity.actions.forEach(action => {
       switch (action.type) {
         case actionTypes.NPCNeedChange:
           updateNPCNeed(npc, action.needId, action.amount);
-          addLog({ message: `${npc.name} performed ${activity.name}, changing ${action.needId} by ${action.amount}`, type: 'info' });
           break;
         case actionTypes.ShipNeedChange:
           updateShipNeed(action.needId, action.amount);
-          addLog({ message: `Ship performed ${activity.name}, changing ${action.needId} by ${action.amount}`, type: 'info' });
           break;
         default:
           throw new Error("Unknown action type");
       }
+      const changeEmoji = action.amount > 0 ? '🟩' : '🟥';
+      addLog({ message: `${changeEmoji} Changing ${action.needId} by ${action.amount}`, type: 'info' });
     });
+    addLog({ message: `-----`, type: 'info' });
   }
 
   function doActivities(assignedActivities: AssignedActivity[]) {
