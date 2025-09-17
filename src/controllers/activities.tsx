@@ -39,8 +39,8 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
     const npc = NPCs.find(n => n.id === assignedActivity.npcId);
     if (!activity || !npc) throw new Error("Activity or NPC not found");
     if (activity.actions.length === 0) return;
-    const message = <Text align='left'><Strong>{npc.name}</Strong> is starting activity <Strong>{activity.name}:</Strong></Text>;
-    addLog({ message, type: 'info' });
+    const message = []
+    message.push(<Text align='left'><Strong>{npc.name}</Strong> is starting activity <Strong>{activity.name}:</Strong></Text>);
     activity.actions.forEach(action => {
       switch (action.type) {
         case actionTypes.NPCNeedChange:
@@ -53,9 +53,9 @@ export function ActivitiesProvider({ children }: { children: React.ReactNode }) 
           throw new Error("Unknown action type");
       }
       const changeEmoji = action.amount > 0 ? '🟩' : '🟥';
-      addLog({ message: `${changeEmoji} Changing ${action.needId} by ${action.amount}`, type: 'info' });
+      message.push(<Text align='left'>{`${changeEmoji} Changing ${action.needId} by ${action.amount}`}</Text>);
     });
-    addLog({ message: `-----`, type: 'info' });
+    addLog({ message, type: 'info' });
   }
 
   function doActivities(assignedActivities: AssignedActivity[]) {

@@ -36,6 +36,15 @@ const ToggleButton = styled(Flex)`
   }
 `;
 
+const LogElementBox = styled(Box)`
+  display: flex;
+  padding: 8px;
+  border: 1px solid var(--gray-a7);
+  border-radius: 5px;
+  width: 100%;
+  align-items: flex-start;
+`;
+
 interface AnimatedIconProps {
   open: boolean;
 }
@@ -47,6 +56,7 @@ const AnimatedDoubleArrowLeftIcon = styled(DoubleArrowLeftIcon) <AnimatedIconPro
 
 export const SideLogPanel = () => {
   const { logs } = useEventLogs();
+  const formatedLogs = logs.slice(-100); // Limit to last 100 logs
 
   const [isOpen, setIsOpen] = React.useState(true);
 
@@ -55,16 +65,21 @@ export const SideLogPanel = () => {
       <ToggleButton align='center' justify='center' m='2' onClick={() => setIsOpen(!isOpen)}>
         <AnimatedDoubleArrowLeftIcon open={isOpen} />
       </ToggleButton>
-      <Flex direction='column' mb='w4' align='start' justify='between'>
+      <Flex direction='column' height='100%' gap='2'>
         <Text>Event Logs</Text>
         <Separator orientation='horizontal' size='4' my='2' />
-        {logs.map(log => {
-          if (typeof log.message === 'string') {
-            return <Text key={log.id} align='left'>{log.message}</Text>;
-          } else {
-            return log.message;
-          }
-        })}
+        <Flex direction='column-reverse' mb='4' pr='1' gap='2' align='start' justify='between' overflowY='scroll'>
+          {formatedLogs.map(log => {
+            const logElement = typeof log.message === 'string'
+              ? <Text key={log.id} align='left'>{log.message}</Text>
+              : log.message;
+            return <LogElementBox key={log.id}>
+              <Flex direction='column' gap='1'>
+                {logElement}
+              </Flex>
+            </LogElementBox>;
+          })}
+        </Flex>
       </Flex>
     </SideLogPanelBox>
   );
