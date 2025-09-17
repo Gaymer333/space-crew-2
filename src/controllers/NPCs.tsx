@@ -18,8 +18,20 @@ export const useNPCsContext = () => {
   return context;
 };
 
+function setupNPCs() {
+  return startingNPCs.map(npc => {
+    const startingRelationships = startingNPCs.reduce((acc, otherNPC) => {
+      if (otherNPC.id !== npc.id) {
+        acc.push({ npcId: otherNPC.id, value: 0 });
+      }
+      return acc;
+    }, [] as { npcId: string; value: number }[]);
+    return { ...npc, relationships: startingRelationships };
+  });
+}
+
 export function NPCsProvider({ children }: { children: React.ReactNode }) {
-  const [NPCs, setNPCs] = useState<NPC[]>(startingNPCs);
+  const [NPCs, setNPCs] = useState<NPC[]>(setupNPCs());
 
   function updateNPCState(npc: NPC, stateId: string, amount: number) {
     const newNPC = { ...npc };

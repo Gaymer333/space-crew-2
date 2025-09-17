@@ -58,7 +58,7 @@ export const SideLogPanel = () => {
   const { logs } = useEventLogs();
   const formatedLogs = logs.slice(-100); // Limit to last 100 logs
 
-  const [isOpen, setIsOpen] = React.useState(true);
+  const [isOpen, setIsOpen] = React.useState(false);
 
   return (
     <SideLogPanelBox width='300px' height='80%' position='fixed' left='0' top='50%' open={isOpen}>
@@ -68,7 +68,7 @@ export const SideLogPanel = () => {
       <Flex direction='column' height='100%' gap='2'>
         <Text>Event Logs</Text>
         <Separator orientation='horizontal' size='4' my='2' />
-        <Flex direction='column-reverse' mb='4' pr='1' gap='2' align='start' justify='between' overflowY='scroll'>
+        <Flex direction='column-reverse' mb='4' pr='1' gap='2' align='start' justify='between' overflowY='auto'>
           {formatedLogs.map(log => {
             const logElement = typeof log.message === 'string'
               ? <Text key={log.id} align='left'>{log.message}</Text>

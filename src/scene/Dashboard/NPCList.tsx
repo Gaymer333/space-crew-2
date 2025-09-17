@@ -1,4 +1,4 @@
-import { Flex, Text, Separator, Grid, Box, Progress } from "@radix-ui/themes";
+import { Flex, Text, Separator, Grid, Box, Progress, HoverCard } from "@radix-ui/themes";
 import { useNPCsContext } from "../../controllers/NPCs";
 
 
@@ -14,7 +14,20 @@ function NPCList() {
           <Flex key={npc.id} direction='column' align='center' justify='center' gap='2'>
             <Text><Text weight='bold'>{npc.name}:</Text> {npc.title}</Text>
 
-            <Text weight='bold'>Needs:</Text>
+            <HoverCard.Root>
+              <HoverCard.Trigger>
+                <Text size='2'>Relationships</Text>
+              </HoverCard.Trigger>
+              <HoverCard.Content>
+                <Flex direction='column' align='start' justify='start' gap='1'>
+                  {npc.relationships.map(rel => {
+                    const relatedNPC = NPCs.find(n => n.id === rel.npcId);
+                    if (!relatedNPC) return null;
+                    return <Text key={rel.npcId} align='left' size='4'>{relatedNPC.name}: {rel.value}</Text>;
+                  })}
+                </Flex>
+              </HoverCard.Content>
+            </HoverCard.Root>
             <Grid columns='2' gap='2' align='center' justify='center'>
               {npc.needs.map(need => (
                 <>

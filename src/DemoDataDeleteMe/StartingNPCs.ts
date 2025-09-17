@@ -30,18 +30,21 @@ const startingNPCs: NPC[] = [
     name: 'Jin',
     title: 'Engineer',
     needs: [...startingStats],
+    relationships: [],
   },
   {
     id: 'npc-2',
     name: 'James',
     title: 'Pilot',
     needs: [...startingStats],
+    relationships: [],
   },
   {
     id: 'npc-3',
     name: 'Max',
     title: 'Scientist',
     needs: [...startingStats],
+    relationships: [],
   },
 ];
 
