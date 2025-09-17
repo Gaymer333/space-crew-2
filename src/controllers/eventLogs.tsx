@@ -25,7 +25,6 @@ export const useEventLogs = () => {
 
 export const EventLogsProvider = ({ children }: { children: ReactNode }) => {
   const [logs, setLogs] = useState<EventLog[]>([]);
-  console.log('logs', logs);
 
   const addLog = (log: Omit<EventLog, 'id' | 'timestamp'>) => {
     setLogs(prev => [
