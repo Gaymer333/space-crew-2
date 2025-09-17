@@ -12,7 +12,7 @@ function ActivitiesList() {
 
   const [assignedActivities, setAssignedActivities] = useState<AssignedActivity[]>([]);
 
-  const isDayComplete = dayProgression >= dayDuration;
+  const isDayComplete = dayProgression > dayDuration;
 
   const handleActivityAssignment = (npcId: string, activityId: string) => {
     setAssignedActivities(prev => {

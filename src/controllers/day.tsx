@@ -22,18 +22,19 @@ export const useDayContext = () => {
 };
 
 const DAY_DURATION = 3
-const DAY_PROGRESSION_TITLES = ["Morning", "Afternoon", "Evening"];
+const DAY_PROGRESSION_TITLES = ["Morning", "Afternoon", "Evening", "Night"];
 
 export function DayProvider({ children }: { children: React.ReactNode }) {
   const { setShowEndOfDaySummary } = useStageContext();
 
   const [day, setDay] = useState(1);
   const [dayProgression, setDayProgression] = useState(1);
+  console.log("DayProvider rendered", dayProgression);
   const currentDayProgressionTitle = useRef(DAY_PROGRESSION_TITLES[0]);
 
   function progressDay() {
     setDayProgression(prev => {
-      const newProgression = Math.min(prev + 1, DAY_DURATION);
+      const newProgression = prev + 1;
       currentDayProgressionTitle.current = DAY_PROGRESSION_TITLES[newProgression - 1];
       return newProgression;
     });
@@ -42,6 +43,7 @@ export function DayProvider({ children }: { children: React.ReactNode }) {
   function nextDay() {
     setDay(prevDay => prevDay + 1);
     setDayProgression(1);
+    currentDayProgressionTitle.current = DAY_PROGRESSION_TITLES[0];
     setShowEndOfDaySummary(true);
   }
 
