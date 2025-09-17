@@ -1,4 +1,4 @@
-import { Flex, Text, Separator } from "@radix-ui/themes";
+import { Flex, Text, Separator, Grid, Box, Progress } from "@radix-ui/themes";
 import { useNPCsContext } from "../../controllers/NPCs";
 
 
@@ -12,18 +12,20 @@ function NPCList() {
         <>
           {index > 0 && <Separator orientation="vertical" size='4' />}
           <Flex key={npc.id} direction='column' align='center' justify='center' gap='2'>
-            <Text size='4' weight='bold'>{npc.name}</Text>
-            <Text>{npc.title}</Text>
+            <Text><Text weight='bold'>{npc.name}:</Text> {npc.title}</Text>
+
             <Text weight='bold'>Needs:</Text>
-            <Flex direction='row' align='center' justify='center' gap='4'>
+            <Grid columns='2' gap='2' align='center' justify='center'>
               {npc.needs.map(need => (
-                <Flex key={need.id} direction='column' align='center' justify='center' gap='1'>
-                  <Text>{need.name}</Text>
-                  <progress value={need.value} max={need.maxValue} />
-                  <Text>{need.value}/{need.maxValue}</Text>
-                </Flex>
+                <>
+                  <Text key={need.id} align='left' size='4'>{need.name}:</Text>
+                  <Box>
+                    <Text key={need.id + '-value'} align='left' size='4'>{need.value} / {need.maxValue}</Text>
+                    <Progress value={need.value} max={need.maxValue} />
+                  </Box>
+                </>
               ))}
-            </Flex>
+            </Grid>
           </Flex>
         </>
       ))}

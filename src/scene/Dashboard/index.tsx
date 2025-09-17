@@ -9,7 +9,7 @@ function Dashboard() {
   return <>
     <EndOfDayDialog />
     <SideLogPanel />
-    <Flex height='800px' width='100%' direction='column' align='center' justify='center' gap='6' p='6'>
+    <Flex width='100%' direction='column' align='center' justify='center' gap='6' p='6'>
       <Flex height='100%' gap='9' align='start' >
         <NPCList />
         <Separator orientation="vertical" size='4' />

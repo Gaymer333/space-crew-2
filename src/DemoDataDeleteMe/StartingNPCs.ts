@@ -7,7 +7,21 @@ const startingStats: need[] = [
     value: 50,
     minValue: 0,
     maxValue: 100,
-  }
+  },
+  {
+    id: 'hunger',
+    name: 'Hunger',
+    value: 50,
+    minValue: 0,
+    maxValue: 100,
+  },
+  {
+    id: 'fatigue',
+    name: 'Fatigue',
+    value: 50,
+    minValue: 0,
+    maxValue: 100,
+  },
 ];
 
 const startingNPCs: NPC[] = [
