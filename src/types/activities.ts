@@ -3,6 +3,7 @@ import { ShipNeedIds } from "./ship";
 
 export enum actionTypes {
   NPCNeedChange = 'NPCNeedChange',
+  NPCsNeedChange = 'NPCsNeedChange',
   ShipNeedChange = 'ShipNeedChange',
 }
 

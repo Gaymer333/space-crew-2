@@ -1,10 +1,11 @@
 import { Box, Button, Flex, Separator, Text } from "@radix-ui/themes";
-import { useNPCsContext } from "../../controllers/NPCs";
+import { useNPCsContext } from "../../controllers/XNPCs";
 import { AssignedActivity, useActivitiesContext } from "../../controllers/activities";
 import { useState } from "react";
 import DayDisplay from "./DayDisplay";
 import { useDayContext } from "../../controllers/day";
 import { css, styled } from "styled-components";
+import { useGameStateContext } from "../../storage/gameState";
 
 interface RadioBoxProps {
   selected?: boolean;
@@ -31,7 +32,7 @@ const RadioBox = styled(Box) <RadioBoxProps>`
 `;
 
 function ActivitiesList() {
-  const { NPCs } = useNPCsContext();
+  const { NPCs } = useGameStateContext().data;
   const { activities, doActivities } = useActivitiesContext();
   const { dayProgression, dayDuration, nextDay } = useDayContext();
 

@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import NPC from "../types/NPCs";
 import startingNPCs from "../DemoDataDeleteMe/StartingNPCs";
+import { useGameStateContext } from "../storage/gameState";
 
-interface NPCsContextType {
-  NPCs: NPC[];
-  setNPCs: (npcs: NPC[]) => void;
+export interface NPCsContextType {
   updateNPCNeed: (npcId: string, needId: string, amount: number) => void;
+  updateAllNPCsNeed: (needId: string, amount: number) => void;
   updateNPCRelationship: (npcId: string, otherNpcId: string, amount: number) => void;
 }
 
@@ -19,24 +19,24 @@ export const useNPCsContext = () => {
   return context;
 };
 
-function setupNPCs() {
-  return startingNPCs.map(npc => {
-    const startingRelationships = startingNPCs.reduce((acc, otherNPC) => {
-      if (otherNPC.id !== npc.id) {
-        acc.push({ npcId: otherNPC.id, value: 0 });
-      }
-      return acc;
-    }, [] as { npcId: string; value: number }[]);
-    return { ...npc, relationships: startingRelationships };
-  });
-}
-
 export function NPCsProvider({ children }: { children: React.ReactNode }) {
-  const [NPCs, setNPCs] = useState<NPC[]>(setupNPCs());
+  const { setData } = useGameStateContext();
 
-  useEffect(() => {
-    console.log("NPCs after relationship update:", NPCs);
-  }, [NPCs]);
+  function updateAllNPCsNeed(needId: string, amount: number) {
+    setData(data => {
+      const newNPCs = data.NPCs.map(n => {
+        const newNPC = { ...n };
+        const need = newNPC.needs.find(s => s.id === needId);
+        if (need) {
+          const newNeed = { ...need };
+          newNeed.value = Math.min(newNeed.maxValue, Math.max(newNeed.minValue, newNeed.value + amount));
+          newNPC.needs = newNPC.needs.map(s => s.id === needId ? newNeed : s);
+        }
+        return newNPC
+      });
+      return { ...data, NPCs: newNPCs };
+    });
+  }
 
   function updateNPCNeed(npcId: string, stateId: string, amount: number) {
     function doUpdate(currentNPCs: NPC[], npcId: string, stateId: string, amount: number) {
@@ -50,7 +50,10 @@ export function NPCsProvider({ children }: { children: React.ReactNode }) {
       newNPC.needs = newNPC.needs.map(s => s.id === stateId ? newNeed : s);
       return newNPC;
     }
-    setNPCs(prevNPCs => prevNPCs.map(n => n.id === npcId ? doUpdate(prevNPCs, npcId, stateId, amount) : n));
+    setData(data => {
+      const newNPCs = data.NPCs.map(n => n.id === npcId ? doUpdate(data.NPCs, npcId, stateId, amount) : n);
+      return { ...data, NPCs: newNPCs };
+    });
   }
 
   function updateNPCRelationship(npcId: string, otherNpcId: string, amount: number) {
@@ -65,12 +68,18 @@ export function NPCsProvider({ children }: { children: React.ReactNode }) {
       newNPC.relationships = newNPC.relationships.map(r => r.npcId === otherNpcId ? newRelationship : r);
       return newNPC;
     }
-    setNPCs(prevNPCs => prevNPCs.map(n => n.id === npcId ? doUpdate(prevNPCs, npcId, otherNpcId) : n));
-    setNPCs(prevNPCs => prevNPCs.map(n => n.id === otherNpcId ? doUpdate(prevNPCs, otherNpcId, npcId) : n));
+    setData(data => {
+      const newNPCs = data.NPCs.map(n => n.id === npcId ? doUpdate(data.NPCs, npcId, otherNpcId) : n);
+      return { ...data, NPCs: newNPCs };
+    });
+    setData(data => {
+      const newNPCs = data.NPCs.map(n => n.id === otherNpcId ? doUpdate(data.NPCs, otherNpcId, npcId) : n);
+      return { ...data, NPCs: newNPCs };
+    });
   }
 
   return (
-    <NPCsContext.Provider value={{ NPCs, setNPCs, updateNPCNeed, updateNPCRelationship }} >
+    <NPCsContext.Provider value={{ updateNPCNeed, updateAllNPCsNeed, updateNPCRelationship }} >
       {children}
     </NPCsContext.Provider>
   );

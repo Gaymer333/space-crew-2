@@ -1,9 +1,10 @@
 import { Flex, Text, Separator, Grid, Box, Progress, HoverCard } from "@radix-ui/themes";
-import { useNPCsContext } from "../../controllers/NPCs";
+import { useNPCsContext } from "../../controllers/XNPCs";
+import { useGameStateContext } from "../../storage/gameState";
 
 
 function NPCList() {
-  const { NPCs } = useNPCsContext();
+  const { NPCs } = useGameStateContext().data;
 
   return <Flex height='100%' direction='column' align='center' justify='start' gap='4'>
     <Text weight='bold' size='7'>NPC List</Text>

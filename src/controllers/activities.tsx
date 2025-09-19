@@ -1,11 +1,12 @@
 import { createContext, useContext, useState } from "react";
 import { actionTypes, Activity } from "../types/activities";
 import { startingActivities } from "../DemoDataDeleteMe/StartingActivities";
-import { useNPCsContext } from "./NPCs";
+import { useNPCsContext } from "./XNPCs";
 import { useShipContext } from "./ship";
 import { useDayContext } from "./day";
 import { useEventLogs } from "./eventLogs";
 import { Strong, Text } from "@radix-ui/themes";
+import { useGameStateContext } from "../storage/gameState";
 
 interface ActivitiesContextType {
   activities: Activity[];
@@ -30,7 +31,8 @@ export const useActivitiesContext = () => {
 };
 
 export function ActivitiesProvider({ children }: { children: React.ReactNode }) {
-  const { NPCs, updateNPCNeed, updateNPCRelationship } = useNPCsContext();
+  const { NPCs } = useGameStateContext().data;
+  const { updateNPCNeed, updateNPCRelationship } = useNPCsContext();
   const { updateShipNeed } = useShipContext();
   const { progressDay } = useDayContext();
   const { addLog } = useEventLogs();
